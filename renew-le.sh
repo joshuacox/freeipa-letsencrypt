@@ -1,17 +1,10 @@
 #!/usr/bin/bash
 set -o nounset -o errexit
+source .env
+source lib.sh
 
-FQDN=$(hostname -f)
 WORKDIR=$(dirname "$(realpath $0)")
-EMAIL=""
-DIRMAN_PASSWORD_PATH=.dirman-password
-if [[ -f "${DIRMAN_PASSWORD_PATH}" ]]; then
-  DIRMAN_PASSWORD=$(cat "${DIRMAN_PASSWORD_PATH}"|tail -n1)
-else
-	read -p "Enter DIRMAN_PASSWORD: " DIRMAN_PASSWORD
-	read -p "Continue? (Y/N): " confirm && [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]] || exit 1
-	echo -n "${DIRMAN_PASSWORD}" > "${DIRMAN_PASSWORD_PATH}"
-fi
+check_dirman
 
 ### cron
 # skip renewal if the cert is still valid for more than 30 days
@@ -58,9 +51,4 @@ if ! command -v service >/dev/null 2>&1; then
 else
 	service httpd start
 fi
-ipa-server-certinstall \
-	-w \
-	--dirman-password="${DIRMAN_PASSWORD}" \
-	-d /etc/letsencrypt/live/${FQDN}/privkey.pem /etc/letsencrypt/live/$FQDN/fullchain.pem \
-	--pin=''
-ipactl restart
+ipa-server-certinstallrrr

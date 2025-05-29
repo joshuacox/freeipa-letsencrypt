@@ -1,31 +1,26 @@
 #!/usr/bin/bash
 set -o nounset -o errexit
-
-FQDN=$(hostname -f)
+source .env
 WORKDIR=$(dirname "$(realpath $0)")
 CERTS=("isrgrootx1.pem" "isrg-root-x2.pem")
+CERTS2=("e5.pem" "e6.pem" "e7.pem" "e8.pem" "e9.pem" "r10.pem" "r11.pem" "r12.pem" "r13.pem" "r14.pem")
+source lib.sh
+check_dirman
 
-sed -i "s/server.example.test/$FQDN/g" $WORKDIR/ipa-httpd.cnf
+main () {
+  sed -i "s/server.example.test/$FQDN/g" $WORKDIR/ipa-httpd.cnf
 
-dnf install letsencrypt -y
+  dnf install letsencrypt -y
 
-if [ ! -d "/etc/ssl/$FQDN" ]
-then
-  mkdir -p "/etc/ssl/$FQDN"
-fi
-
-for CERT in "${CERTS[@]}"
-do
-  if command -v wget &> /dev/null
+  if [ ! -d "/etc/ssl/$FQDN" ]
   then
-    wget -O "/etc/ssl/$FQDN/$CERT" "https://letsencrypt.org/certs/$CERT"
-  elif command -v curl &> /dev/null
-  then
-    curl -o "/etc/ssl/$FQDN/$CERT" "https://letsencrypt.org/certs/$CERT"
+    mkdir -p "/etc/ssl/$FQDN"
   fi
-  ipa-cacert-manage install "/etc/ssl/$FQDN/$CERT"
-done
 
-ipa-certupdate -v
+  do_roots
+  do_intermediaries 
+  ipa-server-certinstallrrr
+}
 
-"$WORKDIR/renew-le.sh" --first-time
+main 
+#"$WORKDIR/renew-le.sh" --first-time
