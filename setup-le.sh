@@ -3,7 +3,7 @@ set -o nounset -o errexit
 
 FQDN=$(hostname -f)
 WORKDIR=$(dirname "$(realpath $0)")
-CERTS=("isrgrootx1.pem" "isrg-root-x2.pem" "lets-encrypt-r3.pem" "lets-encrypt-e1.pem" "lets-encrypt-r4.pem" "lets-encrypt-e2.pem")
+CERTS=("isrgrootx1.pem" "isrg-root-x2.pem")
 
 sed -i "s/server.example.test/$FQDN/g" $WORKDIR/ipa-httpd.cnf
 
@@ -26,6 +26,6 @@ do
   ipa-cacert-manage install "/etc/ssl/$FQDN/$CERT"
 done
 
-ipa-certupdate
+ipa-certupdate -v
 
 "$WORKDIR/renew-le.sh" --first-time
