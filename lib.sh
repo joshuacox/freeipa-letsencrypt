@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 
 do_certs () {
-  THESE_CERTS=$1
-  URL=$2
-  for CERT in "${THESE_CERTS[@]}"
+  for CERT in "${CERTS[@]}"
   do
     if command -v wget &> /dev/null
     then
@@ -21,13 +19,15 @@ do_certs () {
 
 do_roots () {
   CERTS=("isrgrootx1.pem" "isrg-root-x2.pem")
-  do_certs ${CERTS} "https://letsencrypt.org/certs"
+  URL="https://letsencrypt.org/certs"
+  do_certs 
 }
 
 do_intermediaries () {
   if [[ ${INSTALL_INTERMEDIARIES} == 'true' ]]; then
-    CERTS2=("e5.pem" "e6.pem" "e7.pem" "e8.pem" "e9.pem" "r10.pem" "r11.pem" "r12.pem" "r13.pem" "r14.pem")
-    do_certs ${CERTS2} "https://letsencrypt.org/certs/2024"
+    CERTS=("e5.pem" "e6.pem" "e7.pem" "e8.pem" "e9.pem" "r10.pem" "r11.pem" "r12.pem" "r13.pem" "r14.pem")
+    URL="https://letsencrypt.org/certs/2024"
+    do_certs
   fi
 }
 
