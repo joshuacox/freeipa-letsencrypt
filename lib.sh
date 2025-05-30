@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 do_certs () {
-  CERTS=$1
+  THESE_CERTS=$1
   URL=$2
-  for CERT in "${CERTS[@]}"
+  for CERT in "${THESE_CERTS[@]}"
   do
     if command -v wget &> /dev/null
     then
