@@ -1,15 +1,16 @@
 #!/usr/bin/env bash
 
-do_roots () {
-  CERTS=("isrgrootx1.pem" "isrg-root-x2.pem")
+do_certs () {
+  CERTS=$1
+  URL=$2
   for CERT in "${CERTS[@]}"
   do
     if command -v wget &> /dev/null
     then
-      wget -O "/etc/ssl/$FQDN/$CERT" "https://letsencrypt.org/certs/$CERT"
+      wget -O "/etc/ssl/$FQDN/$CERT" "${URL}/$CERT"
     elif command -v curl &> /dev/null
     then
-      curl -o "/etc/ssl/$FQDN/$CERT" "https://letsencrypt.org/certs/$CERT"
+      curl -o "/etc/ssl/$FQDN/$CERT" "${URL}/$CERT"
     else
       echo 'no download command found'
       exit 1
@@ -18,22 +19,14 @@ do_roots () {
   done
 }
 
+do_roots () {
+  CERTS=("isrgrootx1.pem" "isrg-root-x2.pem")
+  do_certs ${CERTS} "https://letsencrypt.org/certs"
+}
+
 do_intermediaries () {
   CERTS2=("e5.pem" "e6.pem" "e7.pem" "e8.pem" "e9.pem" "r10.pem" "r11.pem" "r12.pem" "r13.pem" "r14.pem")
-  for CERT2 in "${CERTS2[@]}"
-  do
-    if command -v wget &> /dev/null
-    then
-      wget -O "/etc/ssl/$FQDN/$CERT2" "https://letsencrypt.org/certs/2024/$CERT2"
-    elif command -v curl &> /dev/null
-    then
-      curl -o "/etc/ssl/$FQDN/$CERT2" "https://letsencrypt.org/certs/2024/$CERT2"
-    else
-      echo 'no download command found'
-      exit 1
-    fi
-    ipa-cacert-manage install "/etc/ssl/$FQDN/$CERT2"
-  done
+  do_certs ${CERTS2} "https://letsencrypt.org/2024"
 }
 
 check_dirman () {
@@ -84,22 +77,22 @@ check_cert_age () {
 	fi
 }
 
-stop_httpd_process () {
-  # httpd process prevents letsencrypt from working, stop it
-  if ! command -v service >/dev/null 2>&1; then
-	  systemctl stop httpd
-  else
-	  service httpd stop
-  fi
-}
-
-start_httpd_process () {
+wrangle_httpd_process () {
+  ACTION=$1
   # start httpd with the new cert
   if ! command -v service >/dev/null 2>&1; then
 	  systemctl start httpd
   else
-	  service httpd start
+	  service httpd ${ACTION}
   fi
+}
+
+stop_httpd_process () {
+  wrangle_httpd_process stop
+}
+
+start_httpd_process () {
+  wrangle_httpd_process start
 }
 
 generate_CSR_deprecated () {

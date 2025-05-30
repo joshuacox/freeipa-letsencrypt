@@ -4,7 +4,6 @@ source .env
 source lib.sh
 WORKDIR=$(dirname "$(realpath $0)")
 
-check_dirman
 check_reqs
 
 do_certbot_run
