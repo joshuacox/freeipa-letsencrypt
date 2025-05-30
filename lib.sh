@@ -26,7 +26,7 @@ do_roots () {
 
 do_intermediaries () {
   CERTS2=("e5.pem" "e6.pem" "e7.pem" "e8.pem" "e9.pem" "r10.pem" "r11.pem" "r12.pem" "r13.pem" "r14.pem")
-  do_certs ${CERTS2} "https://letsencrypt.org/2024"
+  do_certs ${CERTS2} "https://letsencrypt.org/certs/2024"
 }
 
 check_dirman () {
