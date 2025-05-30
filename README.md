@@ -1,6 +1,6 @@
-WARNING: these scripts were created for use by the freeIPA demo server. They no longer work. Continued use is not recommended.
+WARNING: these scripts were created for use by the freeIPA demo server. They require maintenance work and will sometimes need the Root and Intermediary certificates to be adjusted. Continued use is not recommended, but pull requests welcome to keep it working.
 
-These two scripts try to automatically obtain and install Let's Encrypt certs
+These three scripts try to automatically obtain and install Let's Encrypt certs
 to FreeIPA web interface.
 
 To use it, do this:
@@ -10,6 +10,7 @@ To use it, do this:
 * set EMAIL variable in .env
 * set other variables in .env
 * run grab-cert-le.sh script once to grab the certificate from LE 
+* ensure that cert was obtained successfully this is the only step that will get temporarily banned from LE
 * run setup-le.sh script once to prepare the machine. These two scripts will:
   * install Let's Encrypt client package
   * install Let's Encrypt CA certificates into FreeIPA certificate store
