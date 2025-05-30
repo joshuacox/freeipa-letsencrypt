@@ -6,8 +6,11 @@ to FreeIPA web interface.
 To use it, do this:
 * BACKUP /var/lib/ipa/certs/ and /var/lib/ipa/private/ to some safe place (it contains private keys!)
 * clone/unpack all scripts somewhere
-* set EMAIL variable in renew-le.sh
-* run setup-le.sh script once to prepare the machine. The script will:
+* cp example.env .env
+* set EMAIL variable in .env
+* set other variables in .env
+* run grab-cert-le.sh script once to grab the certificate from LE 
+* run setup-le.sh script once to prepare the machine. These two scripts will:
   * install Let's Encrypt client package
   * install Let's Encrypt CA certificates into FreeIPA certificate store
   * requests new certificate for FreeIPA web interface
