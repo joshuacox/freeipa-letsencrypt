@@ -132,7 +132,6 @@ do_certbot_run () {
   -m ${EMAIL} \
   --standalone \
   --agree-tos \
-  --webroot \
   -d "${THESE_DOMAINS}"
 
   start_httpd_process
