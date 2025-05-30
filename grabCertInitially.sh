@@ -7,11 +7,4 @@ WORKDIR=$(dirname "$(realpath $0)")
 check_dirman
 check_reqs
 
-main () {
-  do_roots
-  do_intermediaries 
-  ipa-server-certinstallrrr
-}
-
-main 
-#"$WORKDIR/renew-le.sh" --first-time
+do_certbot_run
