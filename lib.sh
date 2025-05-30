@@ -79,7 +79,7 @@ check_cert_age () {
 		now_timestamp=`date +%s`
 		let diff=($end_timestamp-$now_timestamp)/86400
 		if [ "$diff" -gt "30" ]; then
-			exit 0
+		  exit 0
 		fi
 	fi
 }
