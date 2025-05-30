@@ -10,6 +10,9 @@ do_roots () {
     elif command -v curl &> /dev/null
     then
       curl -o "/etc/ssl/$FQDN/$CERT" "https://letsencrypt.org/certs/$CERT"
+    else
+      echo 'no download command found'
+      exit 1
     fi
     ipa-cacert-manage install "/etc/ssl/$FQDN/$CERT"
   done
@@ -25,6 +28,9 @@ do_intermediaries () {
     elif command -v curl &> /dev/null
     then
       curl -o "/etc/ssl/$FQDN/$CERT2" "https://letsencrypt.org/certs/2024/$CERT2"
+    else
+      echo 'no download command found'
+      exit 1
     fi
     ipa-cacert-manage install "/etc/ssl/$FQDN/$CERT2"
   done
