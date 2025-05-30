@@ -31,7 +31,8 @@ check_dirman () {
   if [[ -f "${DIRMAN_PASSWORD_PATH}" ]]; then
     DIRMAN_PASSWORD=$(cat "${DIRMAN_PASSWORD_PATH}"|tail -n1)
   else
-	  read -p "Enter DIRMAN_PASSWORD: " DIRMAN_PASSWORD
+	  read -s -p "Enter DIRMAN_PASSWORD: " DIRMAN_PASSWORD
+	  echo ''
 	  read -p "Continue? (Y/N): " confirm && [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]] || exit 1
 	  echo -n "${DIRMAN_PASSWORD}" > "${DIRMAN_PASSWORD_PATH}"
   fi
